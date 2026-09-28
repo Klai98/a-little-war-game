@@ -1,0 +1,504 @@
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #0d0d0f;
+  color: #eee;
+  overflow: hidden;
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Faction select screen */
+.faction-select {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.faction-select h1 {
+  text-align: center;
+  font-size: 36px;
+  margin: 0 0 4px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #aaa;
+  margin: 0 0 24px;
+}
+
+.faction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 260px);
+  gap: 20px;
+  justify-content: center;
+}
+
+.faction-card {
+  background: #151517;
+  border: 3px solid var(--faction-color, #666);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.faction-banner {
+  height: 40px;
+  background: var(--faction-color, #666);
+  border-radius: 4px;
+}
+
+.faction-card h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.faction-desc {
+  font-size: 13px;
+  color: #ccc;
+  min-height: 60px;
+}
+
+.faction-buff {
+  font-size: 13px;
+  color: #f0cc4c;
+}
+
+.faction-unit,
+.faction-treasury {
+  font-size: 13px;
+  color: #ddd;
+}
+
+.select-btn {
+  margin-top: auto;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #2d6a4f;
+  color: #fff;
+  font-size: 14px;
+}
+
+.select-btn:hover {
+  background: #3a8564;
+}
+
+/* Campaign map screen */
+.campaign-map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.viewport-container {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.strategic-map-view {
+  display: none;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: #c5d2d6;
+}
+
+.strategic-map-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.campaign-map.is-strategic .viewport-container canvas {
+  visibility: hidden;
+}
+
+.campaign-map.is-strategic .strategic-map-view {
+  display: block;
+}
+
+.campaign-map.is-strategic .marker-layer > :not(.strategic-map-canvas) {
+  display: none;
+}
+
+.viewport-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.viewport-container.army-command-mode canvas {
+  cursor: url("../Cursors/move.png") 8 8, crosshair;
+}
+
+.marker-layer {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.city-marker,
+.army-marker,
+.resource-marker {
+  position: absolute;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-size: 11px;
+  padding: 0;
+}
+
+.city-marker {
+  width: max-content;
+  min-width: 68px;
+  max-width: 126px;
+  align-items: flex-start;
+  gap: 1px;
+  box-sizing: border-box;
+  padding: 3px 6px;
+  color: #29251f;
+  background: rgba(239, 229, 204, 0.94);
+  border: 1px solid #544a38;
+  border-left: 4px solid var(--faction-color, #777);
+  border-radius: 3px;
+  box-shadow: 0 2px 5px #0006;
+  text-shadow: none;
+}
+
+.city-marker .marker-owner {
+  color: var(--faction-color, #666);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.city-marker .marker-label {
+  overflow: hidden;
+  max-width: 100%;
+  color: #29251f;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.city-marker.is-far:not(.is-capital) { display: none; }
+.city-marker.is-far:not(.is-capital) .marker-label,
+.resource-marker.is-far .marker-label {
+  display: none;
+}
+
+.army-marker .marker-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  border: 2px solid rgba(0, 0, 0, 0.9);
+  background: var(--faction-color, #888);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.army-marker .marker-count {
+  font-size: 10px;
+}
+.resource-marker .resource-icon { width: 28px; height: 28px; display: grid; place-items: center; transform: rotate(45deg); border: 2px solid #ecd49d; box-shadow: 0 2px 5px #0008; color: #fff4d4; font-size: 11px; font-weight: 700; }
+.resource-marker .resource-icon::first-letter { transform: rotate(-45deg); }
+
+.top-bar-slot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+}
+
+.top-bar {
+  height: 56px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 16px;
+  background: #151517;
+  border-bottom: 1px solid #333;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.top-bar button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 4px;
+  background: #2d6a4f;
+  color: #fff;
+  cursor: pointer;
+}
+
+.top-bar button:hover {
+  background: #3a8564;
+}
+
+.top-bar .spacer {
+  flex: 1;
+}
+
+.side-panel {
+  position: absolute;
+  top: 70px;
+  right: 10px;
+  width: 300px;
+  bottom: 10px;
+  overflow-y: auto;
+}
+
+.side-panel-card,
+.diplomacy-panel {
+  background: #151517;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.side-panel-card button,
+.diplomacy-panel button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  background: #2d6a4f;
+  color: #fff;
+  cursor: pointer;
+}
+
+.side-panel-card button:disabled {
+  background: #444;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.diplomacy-row {
+  border: 2px solid var(--faction-color, #666);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.diplomacy-row h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: var(--faction-color, #fff);
+}
+
+.diplomacy-row .row-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.food-ok {
+  color: #8fd17a;
+}
+
+.food-bad {
+  color: #e07a6f;
+}
+
+.building-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.building-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: #1c1c1f;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+.building-row .build-btn {
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+/* Campaign recruitment, unit cards and battle reports */
+.side-panel { width: 360px; }
+.side-panel-card { gap: 10px; }
+.side-panel-card h2 { margin: 0; font-size: 24px; letter-spacing: .04em; }
+.panel-kicker { color: #c5a66b; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; }
+.section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; margin: 8px 0 0; padding-bottom: 6px; border-bottom: 1px solid #514633; font-size: 15px; }
+.section-title span { color: #9b927f; font-size: 11px; font-weight: 400; }
+.city-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.city-stats span { display: flex; justify-content: space-between; background: #20201e; padding: 7px 9px; color: #bcb6a9; font-size: 12px; }
+.city-stats b { color: #eee3cc; }
+.building-list { margin-top: 2px; }
+.building-row { background: #20201e; border-color: #38352f; }
+.building-row > span { color: #ded4c0; }
+.building-row button { background: #63512f; }
+.recruit-list, .unit-cards { display: flex; flex-direction: column; gap: 7px; }
+.unit-recruit-card { display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 9px; min-height: 58px; padding: 7px; border: 1px solid #504632; background: linear-gradient(110deg, #26231d, #191919); }
+.unit-recruit-card.locked { border-color: #363331; opacity: .72; }
+.unit-crest { display: grid; place-items: center; width: 34px; height: 40px; color: #e5c77f; border: 1px solid #7e6840; background: #332a1b; font-size: 16px; font-weight: 700; }
+.unit-recruit-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.unit-recruit-info b { color: #f0e6d1; font-size: 13px; }
+.unit-recruit-info span, .unit-recruit-info small { color: #aaa18f; font-size: 11px; }
+.unit-recruit-card button { min-width: 66px; background: #6b5428; color: #f4dfad; font-size: 11px; line-height: 1.5; }
+.unit-recruit-card button:disabled { color: #8b877e; background: #393735; }
+.recruit-hint { min-height: 16px; color: #e0ac70; margin: 0; }
+.army-meters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.army-meters div { display: flex; flex-direction: column; padding: 8px; background: #24221d; border-top: 2px solid #997d48; }
+.army-meters span { color: #aaa18f; font-size: 11px; }
+.army-meters b { color: #f0dfbb; font-size: 19px; }
+.unit-card { padding: 9px; background: linear-gradient(120deg, #29271f, #191919); border: 1px solid #514632; border-left: 3px solid #ae8c4c; }
+.unit-card-top { display: flex; align-items: center; gap: 9px; }
+.unit-number { color: #ad9566; font-family: Georgia, serif; font-size: 19px; }
+.unit-card-top div { display: flex; flex-direction: column; flex: 1; gap: 2px; }
+.unit-card-top b { color: #f2e8d4; font-size: 14px; }
+.unit-card-top small, .soldier-count { color: #aaa18f; font-size: 11px; }
+.unit-strength { color: #e5c77f; font-weight: 700; }
+.unit-card-stats { display: flex; justify-content: space-between; margin: 7px 0; color: #c5bda9; font-size: 11px; }
+.soldier-bar { height: 4px; background: #413d34; }
+.soldier-bar i { display: block; height: 100%; background: linear-gradient(90deg, #8d342b, #d2ae5d); }
+.battle-result { border-top: 3px solid #a7884e; margin-top: 12px; }
+.battle-result.defeat { border-top-color: #913e37; }
+.battle-result.victory h2 { color: #e2c577; }
+.battle-result.defeat h2 { color: #d98b7c; }
+.battle-score { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.battle-score span { display: flex; flex-direction: column; gap: 5px; padding: 9px; background: #22211e; color: #aaa18f; font-size: 11px; }
+.battle-score b { color: #eee0c1; font-size: 20px; }
+.battle-clash { position: relative; display: flex; align-items: center; justify-content: center; gap: 12px; height: 50px; overflow: hidden; background: radial-gradient(ellipse, #534324 0%, #211e18 68%, transparent 100%); color: #e9cb7a; }
+.battle-clash span { font-size: 28px; animation: clash-in .55s ease-out both; }
+.battle-clash i { position: absolute; width: 84px; height: 2px; background: #e5c77f; box-shadow: 0 0 12px #f0b949; transform: scaleX(0); animation: clash-flash .45s .35s ease-out forwards; }
+.battle-clash b { z-index: 1; padding: 3px 8px; color: #fff2cd; background: #332a1b; border: 1px solid #997d48; border-radius: 50%; animation: result-pop .35s .55s both; }
+@keyframes clash-in { from { transform: translateX(-42px) rotate(-35deg); opacity: .2; } to { transform: translateX(0) rotate(0); opacity: 1; } }
+@keyframes clash-flash { 0% { transform: scaleX(0); opacity: 0; } 40% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(.4); opacity: .3; } }
+@keyframes result-pop { from { transform: scale(.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.empty-note { padding: 12px; color: #a9a294; text-align: center; background: #20201e; font-size: 12px; }
+.top-bar { gap: 14px; }
+.army-marker.is-selected .marker-icon { outline: 3px solid #e9cb7a; outline-offset: 2px; }
+.city-marker.is-reachable { border-color: #8fc780; box-shadow: 0 0 12px #78b96d88; }
+.city-marker.is-assault { border-color: #dd8564; box-shadow: 0 0 12px #cf684a88; }
+.city-marker.is-out-of-range { opacity: .48; filter: grayscale(.65); }
+.city-marker[data-move-cost]::after { content: attr(data-move-cost); margin-top: 1px; padding: 2px 5px; color: #dff3d5; background: #263b27e8; border: 1px solid #65865d; border-radius: 3px; font-size: 10px; white-space: nowrap; }
+.city-marker.is-assault[data-move-cost]::after { color: #ffe0c4; background: #49281fe8; border-color: #a7654c; }
+.city-marker.is-out-of-range[data-move-cost]::after { color: #d0c9bc; background: #37332fe8; border-color: #625a4e; }
+.resource-marker.is-reachable .resource-icon { outline: 2px solid #8fc780; outline-offset: 3px; }
+.resource-marker.is-assault .resource-icon { outline: 2px solid #dd8564; outline-offset: 3px; }
+.resource-marker.is-out-of-range { opacity: .48; filter: grayscale(.65); }
+.resource-marker[data-move-cost]::after { content: attr(data-move-cost); margin-top: 2px; padding: 2px 4px; color: #f3dfa8; background: #28251ee8; border: 1px solid #847047; font-size: 9px; white-space: nowrap; transform: rotate(-45deg); }
+.resource-panel { margin-top: 8px; border-top: 3px solid #af8d4e; }
+.resource-income { color: #a6d184; }
+.movement-panel { display: flex; flex-direction: column; gap: 6px; padding: 9px 10px; background: #24221d; border: 1px solid #514632; }
+.movement-panel > div:first-child { display: flex; justify-content: space-between; align-items: baseline; color: #cfc3aa; font-size: 12px; }
+.movement-panel strong { color: #e9cb7a; font-size: 20px; }
+.movement-panel strong small { color: #aaa18f; font-size: 12px; }
+.movement-panel > small { color: #aaa18f; line-height: 1.5; font-size: 10px; }
+.route-destination { color: #e7cc8d; font-size: 11px; }
+.movement-bar { height: 6px; background: #413d34; }
+.movement-bar i { display: block; height: 100%; background: linear-gradient(90deg, #698e58, #d0b35e); transition: width .2s ease; }
+.side-panel.army-hud-active { top: auto; left: 12px; right: 12px; bottom: 12px; width: auto; max-height: min(310px, 36vh); overflow: hidden; }
+.army-hud { display: grid; grid-template-columns: 188px minmax(0, 1fr) 220px; gap: 12px; height: 286px; box-sizing: border-box; padding: 10px; overflow: hidden; background: linear-gradient(180deg, #403d34ed, #171716f5 24%, #171716fa); border: 2px solid #9e895f; box-shadow: 0 0 0 1px #171512, 0 8px 36px #000b; }
+.army-commander-column, .army-roster-column, .army-minimap-column { min-width: 0; min-height: 0; }
+.army-commander-column { display: flex; flex-direction: column; align-items: center; padding: 3px 9px; border-right: 1px solid #5b513d; }
+.hud-heading { display: block; color: #dec996; font: 12px Georgia, "Microsoft YaHei", sans-serif; letter-spacing: .13em; text-transform: uppercase; }
+.general-portrait { position: relative; width: 108px; height: 116px; margin: 6px 0 4px; overflow: hidden; border: 2px solid #a78b52; box-shadow: 0 0 0 3px #211f1b; background: #455248; }
+.general-portrait svg { display: block; width: 100%; height: 100%; }
+.general-level { position: absolute; right: 3px; bottom: 3px; padding: 2px 5px; color: #f7e9c7; background: #171716df; border: 1px solid #ad9055; font-size: 10px; }
+.army-commander-column h2 { margin: 2px 0; color: #f1e6ce; font-size: 17px; }
+.general-rank { color: #aaa18f; font-size: 11px; }
+.general-effect { display: flex; justify-content: space-between; width: 100%; margin: 7px 0; color: #b9b09c; font-size: 10px; }
+.general-effect b { color: #9fcd82; }
+.army-commander-column .close-btn { margin-top: auto; width: 100%; padding: 5px; background: #514632; }
+.army-roster-column { display: flex; flex-direction: column; gap: 7px; overflow: hidden; }
+.roster-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.roster-heading h2 { margin: 1px 0 0; color: #f0e5cd; font-size: 17px; }
+.roster-health { color: #eee0c1; font-size: 13px; white-space: nowrap; }
+.roster-health b { color: #a8cf89; font-size: 18px; }
+.roster-health span { color: #a9a08c; font-size: 10px; }
+.army-roster-column .army-meters { display: flex; gap: 16px; padding: 4px 8px; border-block: 1px solid #403a30; color: #aaa18f; font-size: 10px; }
+.army-roster-column .army-meters span { display: flex; gap: 5px; align-items: center; }
+.army-roster-column .army-meters b { color: #ead8b4; font-size: 12px; }
+.unit-card-rail { display: flex; flex: 1; min-height: 0; gap: 7px; overflow-x: auto; overflow-y: hidden; padding: 1px 1px 5px; }
+.army-unit-card { display: flex; flex: 0 0 104px; flex-direction: column; gap: 4px; min-height: 0; padding: 5px; color: #eee3cd; background: linear-gradient(180deg, #e8e1d0, #b5aa91 3%, #302b22 4%, #171716 100%); border: 1px solid #8b7952; box-shadow: inset 0 0 0 1px #0b0b0a; }
+.unit-card-art { position: relative; display: grid; flex: 1; min-height: 86px; place-items: center; overflow: hidden; color: #12120f; background: repeating-linear-gradient(135deg, #ded8c8, #ded8c8 5px, #c9c1ae 5px, #c9c1ae 7px); border: 1px solid #a69770; }
+.unit-card-art::before { position: absolute; bottom: -16px; width: 70px; height: 68px; content: ""; border: 5px solid #171716; border-radius: 45% 45% 12% 12%; background: linear-gradient(90deg, var(--faction-color), #26231d 58%); opacity: .88; }
+.unit-card-art b { z-index: 1; color: #eee2c8; font: 34px Georgia, serif; text-shadow: 1px 2px 2px #000; }
+.unit-card-art small { position: absolute; bottom: 3px; left: 4px; z-index: 2; color: #dbbf71; font-size: 10px; }
+.unit-card-type { position: absolute; top: 3px; left: 3px; z-index: 2; padding: 2px 4px; color: #171512; background: #d9bd66; font-size: 9px; }
+.army-unit-card > strong { overflow: hidden; color: #f2e7cf; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.unit-card-count { color: #aaa18f; font-size: 9px; }
+.army-unit-card .soldier-bar { flex: 0 0 4px; }
+.army-unit-card .unit-card-stats { margin: 0; font-size: 9px; }
+.army-roster-column .movement-panel { display: grid; grid-template-columns: 132px 1fr; align-items: center; gap: 5px 10px; padding: 5px 8px; }
+.army-roster-column .movement-panel > div:first-child { grid-row: span 2; }
+.army-roster-column .movement-panel > small { grid-column: 2; font-size: 9px; }
+.army-roster-column .movement-panel strong { font-size: 16px; }
+.army-roster-column .movement-panel .route-destination { grid-column: 2; grid-row: 1; }
+.army-minimap-column { display: flex; flex-direction: column; gap: 5px; padding-left: 10px; border-left: 1px solid #5b513d; }
+.army-minimap-column .hud-heading { display: flex; justify-content: space-between; align-items: baseline; }
+.army-minimap-column .hud-heading small { color: #aaa18f; font-size: 9px; letter-spacing: 0; }
+.campaign-minimap { display: block; flex: 1; width: 100%; min-height: 120px; border: 1px solid #81734e; background: #14252c; }
+.minimap-legend { display: flex; justify-content: space-between; color: #aaa18f; font-size: 9px; }
+.minimap-legend span { display: flex; gap: 4px; align-items: center; }
+.city-dot, .resource-dot, .camera-dot { display: inline-block; width: 6px; height: 6px; background: #c7c4ab; border-radius: 50%; }
+.resource-dot { background: #e7c36c; transform: rotate(45deg); border-radius: 0; }
+.camera-dot { width: 10px; height: 6px; background: transparent; border: 1px dashed #fff0c5; border-radius: 0; }
+@media (max-width: 700px) {
+  .side-panel { top: auto; left: 8px; right: 8px; bottom: 8px; width: auto; max-height: 58vh; }
+  .top-bar { gap: 8px; padding: 0 8px; overflow-x: auto; font-size: 11px; }
+  .top-bar button { padding: 6px 8px; }
+  .side-panel.army-hud-active { max-height: 58vh; }
+  .army-hud { grid-template-columns: 110px minmax(0, 1fr); height: min(420px, 56vh); gap: 7px; padding: 7px; }
+  .army-commander-column { padding-inline: 4px; }
+  .general-portrait { width: 78px; height: 91px; }
+  .army-commander-column h2 { font-size: 14px; }
+  .general-rank, .general-effect { font-size: 9px; }
+  .army-minimap-column { display: none; }
+  .army-roster-column .movement-panel { grid-template-columns: 1fr; }
+  .army-roster-column .movement-panel > div:first-child, .army-roster-column .movement-panel > small, .army-roster-column .movement-panel .route-destination { grid-column: auto; grid-row: auto; }
+  .roster-health { font-size: 10px; }
+}
